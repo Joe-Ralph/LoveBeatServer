@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pairing Page</title>
+</head>
+<body>
+    <h1>Enter Pairing Code</h1>
+    <form id="pairForm">
+        <input type="number" id="pairCode" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('pairForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const receiverPairId = document.getElementById('pairCode').value;
+            const urlParams = new URLSearchParams(window.location.search);
+            const senderId = urlParams.get('senderId');
+            const receiverId = urlParams.get('receiverId');
+            const senderPairId = urlParams.get('paircode');
+
+            const data = {
+                    senderId: senderId,
+                    receiverId: receiverId,
+                    senderPairId: senderPairId,
+                    receiverPairId: receiverPairId
+                };
+                console.log(data)
+            fetch('/pair', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Pairing successful!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Pairing failed. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
